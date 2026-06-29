@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+psycopg2-binary
+pgvector
+sentence-transformers
+pypdf
+python-docx
+httpx
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+python-dotenv
+ollama
