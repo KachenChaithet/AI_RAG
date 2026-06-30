@@ -72,7 +72,7 @@ export default function Page() {
                                         <ReactMarkdown>
                                             {message.text}
                                         </ReactMarkdown>
-
+                                        <div className=""></div>
                                     </div>
                                 )
                             ))}
