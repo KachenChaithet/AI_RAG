@@ -1,5 +1,5 @@
+import api from "@/lib/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
 
@@ -25,7 +25,7 @@ interface Message {
 export function useSessions(limit = 20, offset = 0, search?: string, type: "user" | "admin" = "user", options?: { enabled?: boolean }) {
     return useQuery<Session[] | undefined>({
         queryKey: ["sessions", type, limit, offset, search],
-        queryFn: () => axios.get("http://localhost:8000/session/user", {
+        queryFn: () => api.get("/session/user", {
             withCredentials: true,
             params: {
                 limit,
@@ -41,7 +41,7 @@ export function useSessions(limit = 20, offset = 0, search?: string, type: "user
 export function useSession(sessionId: number) {
     return useQuery<Session | undefined>({
         queryKey: ["session", sessionId],
-        queryFn: () => axios.get(`http://localhost:8000/session/${sessionId}`,
+        queryFn: () => api.get(`/session/${sessionId}`,
             {
                 withCredentials: true
             }
@@ -54,8 +54,8 @@ export function useMessage(sessionId: number) {
     return useQuery<Message[] | undefined>({
         queryKey: ["message", sessionId],
         queryFn: () =>
-            axios
-                .get(`http://localhost:8000/session/${sessionId}/message`,
+            api
+                .get(`/session/${sessionId}/message`,
                     {
                         withCredentials: true
                     }
@@ -70,8 +70,8 @@ export function useDeleteSession() {
     const router = useRouter()
     return useMutation({
         mutationFn: (sessionId: number) =>
-            axios
-                .delete(`http://localhost:8000/session/${sessionId}`, {
+            api
+                .delete(`/session/${sessionId}`, {
                     withCredentials: true
                 })
                 .then(r => r.data),
@@ -86,7 +86,7 @@ export function useDeleteSessions() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: (sessionIds: number[]) =>
-            axios.delete(`http://localhost:8000/session`, {
+            api.delete(`/session`, {
                 data: { session_ids: sessionIds },
                 withCredentials: true
             }).then(r => r.data),
@@ -100,8 +100,8 @@ export function useUpdateSession() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({ sessionId, topic }: { sessionId: number, topic: string }) =>
-            axios
-                .put(`http://localhost:8000/session/${sessionId}`, { topic }, {
+            api
+                .put(`/session/${sessionId}`, { topic }, {
                     withCredentials: true
                 })
                 .then(r => r.data),

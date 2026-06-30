@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = "HS256"
-EXPIRE_MINUTES = 60 * 24
+SECRET_KEY = os.getenv("JWT_SECRET")
+ALGORITHM = os.getenv("JWT_ALGORITHM")
+EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES"))
 
 
 def create_token(data: dict) -> str:

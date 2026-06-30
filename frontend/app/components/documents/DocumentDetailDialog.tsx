@@ -1,11 +1,12 @@
-import { Card } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Document } from "@/hooks/useDocument"
+import { Document, useDocumentChunks } from "@/hooks/useDocument"
 import { format } from "date-fns"
 import { th } from "date-fns/locale"
 import { File, FileText, Info, Layers, PanelTopDashed, SquareLibrary, User } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { useState } from "react"
 
 interface Props {
     document: Document | null
@@ -26,10 +27,14 @@ const getFileType = (type: string) => {
 
 const DocumentDetailDialog = ({ document, open, onOpenChage }: Props) => {
     if (!document) return null
+    const { data } = useDocumentChunks(document.id)
+
+    const [selectedChunk, setSelectedChunk] = useState<string | null>(null)
+
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChage}>
-            <DialogContent>
+        <Dialog open={open} onOpenChange={onOpenChage} >
+            <DialogContent className="min-w-2xl max-h-200 overflow-hidden ">
                 <DialogHeader>
                     <DialogTitle>Document Details</DialogTitle>
 
@@ -52,11 +57,13 @@ const DocumentDetailDialog = ({ document, open, onOpenChage }: Props) => {
 
                     </div>
                 </div>
-                <Tabs>
+                <Tabs className="flex flex-col gap-5  ">
                     <TabsList variant={"line"}>
                         <TabsTrigger value="overview">Overview</TabsTrigger>
                         <TabsTrigger value="content">Content</TabsTrigger>
                     </TabsList>
+
+                    {/* overview */}
                     <TabsContent value="overview">
                         <Card className="p-2">
                             <div className="flex justify-between items-center">
@@ -110,9 +117,47 @@ const DocumentDetailDialog = ({ document, open, onOpenChage }: Props) => {
                             </div>
                         </Card>
                     </TabsContent>
+
+                    {/* content */}
+                    <TabsContent value="content">
+                        <Card className="p-2 flex-row h-100 ">
+
+                            <Card className="flex-1 select-none">
+                                <CardHeader>
+                                    <CardTitle className="text-sm">Document Structure</CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex flex-col gap-2 overflow-y-auto">
+                                    {data?.map((item, i) => (
+                                        <Card
+                                            onClick={() => setSelectedChunk(item.content)}
+                                            key={i}
+                                            className={`p-2 shrink-0 flex  flex-row items-center ${selectedChunk === item.content && "bg-neutral-100"}`}
+
+                                        >
+                                            <p className="max-w-sm truncate">{item.content}</p>
+                                            <p className="text-muted-foreground text-xs shrink-0">page {i + 1}</p>
+                                        </Card>
+                                    ))}
+                                </CardContent>
+                            </Card>
+
+                            <Card className="flex-1">
+                                <CardHeader>
+                                    <CardTitle className="text-sm">Document Content</CardTitle>
+                                </CardHeader>
+                                <CardContent className="overflow-y-auto">
+                                    {selectedChunk ? (
+                                        <p>{selectedChunk}</p>
+                                    ) : (
+                                        <p>not found</p>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </Card>
+                    </TabsContent>
                 </Tabs>
-            </DialogContent>
-        </Dialog>
+            </DialogContent >
+        </Dialog >
     )
 }
 export default DocumentDetailDialog

@@ -181,20 +181,24 @@ def admin_chat(
                     media_type="text/event-stream",
                 )
 
-        history = get_history(cur, session_id,6)
-       
+        history = get_history(cur, session_id, 6)
 
         system_prompt = """คุณเป็น admin assistant ที่มี tool: get_users, save_data
 
-            ตัวอย่างการใช้ tool:
-            user: "ดู user ทั้งหมด" → เรียก get_users
-            user: "มี user กี่คน" → เรียก get_users
-            user: "เพิ่ม user ใหม่ชื่อ X" → เรียก save_data
+        ตัวอย่างการใช้ tool:
+        user: "ดู user ทั้งหมด" → เรียก get_users
+        user: "มี user กี่คน" → เรียก get_users
+        user: "เพิ่ม user ใหม่ชื่อ X" → เรียก save_data
 
-            กฎการใช้ history:
-            - เมื่อ user ถามถึงข้อมูล user/รายชื่อ/จำนวน user ให้เรียก function get_users เสมอ ไม่ว่าจะเคยเรียกมาก่อนหรือไม่
-            - ใช้ข้อมูลจาก history เฉพาะกรณีที่คำถามเป็นคำถามต่อเนื่องจากคำตอบก่อนหน้าทันที (เช่น "อันนั้นมีกี่คน" ต่อจากที่เพิ่งแสดงผลไป)
-            - ห้าม generate ข้อมูลตัวอย่างขึ้นมาเองแล้วเรียก function
+        กฎการใช้ history:
+        - เมื่อ user ถามถึงข้อมูล user/รายชื่อ/จำนวน user ให้เรียก function get_users เสมอ ไม่ว่าจะเคยเรียกมาก่อนหรือไม่
+        - ใช้ข้อมูลจาก history เฉพาะกรณีที่คำถามเป็นคำถามต่อเนื่องจากคำตอบก่อนหน้าทันที (เช่น "อันนั้นมีกี่คน" ต่อจากที่เพิ่งแสดงผลไป)
+        - ห้าม generate ข้อมูลตัวอย่างขึ้นมาเองแล้วเรียก function
+
+        กฎการตอบ:
+        - ใช้คำลงท้าย "ครับ" เท่านั้น ห้ามใช้ "ค่ะ/ครับ"
+        - ถ้าข้อมูลไม่ครบสำหรับ save_data ให้ถามผู้ใช้ก่อน อย่าเดาเอง
+        - ตอบเป็นภาษาไทย กระชับ ตรงประเด็น
         """
 
         # รอบแรก: ไม่ stream เพื่อเช็ค tool_calls
@@ -308,7 +312,7 @@ def admin_chat(
         print("no response tool")
         #  รอบสอง: stream จริง
         stream_response = ollama.chat(
-            model="qwen2.5:7b",
+            model="gemma4:e4b",
             messages=[
                 {"role": "system", "content": system_prompt},
                 *history,

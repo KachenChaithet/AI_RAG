@@ -1,5 +1,5 @@
+import api from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
 
@@ -8,7 +8,7 @@ export function useLogout() {
     const router = useRouter()
 
     return useMutation({
-        mutationFn: () => axios.post("http://localhost:8000/logout", {}, { withCredentials: true }),
+        mutationFn: () => api.post("/logout", {}, { withCredentials: true }),
         onSuccess: () => {
             router.push("/login")
         }
@@ -24,7 +24,7 @@ export function useLogin() {
     const router = useRouter()
 
     return useMutation({
-        mutationFn: (body: LoginBody) => axios.post("http://localhost:8000/login", { email: body.email, password: body.password }, { withCredentials: true }),
+        mutationFn: (body: LoginBody) => api.post("/login", { email: body.email, password: body.password }, { withCredentials: true }),
         onSuccess: () => {
             router.push("/")
         }

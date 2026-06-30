@@ -8,6 +8,9 @@ interface ChatBody {
     session_id?: number | null
 }
 
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
 export function useChat() {
     const queryClient = useQueryClient()
 
@@ -17,7 +20,7 @@ export function useChat() {
             session_id: number
             onChunk: (fullText: string) => void
         }) => {
-            const response = await fetch("http://localhost:8000/chat", {
+            const response = await fetch(`${API_URL}/chat`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
@@ -70,7 +73,7 @@ export function useAdminChat() {
             session_id: number,
             onChunk: (fullText: string) => void
         }) => {
-            const response = await fetch("http://localhost:8000/admin/chat", {
+            const response = await fetch(`${API_URL}/admin/chat`, {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },

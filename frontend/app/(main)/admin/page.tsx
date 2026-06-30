@@ -17,6 +17,7 @@ const page = () => {
     if (user?.role !== "admin") {
         redirect("/")
     }
+    const API_URL = process.env.NEXT_PUBLIC_API_URL
 
     const handleStartChat = async () => {
         if (!message.trim()) return
@@ -25,7 +26,7 @@ const page = () => {
         const text = message
         setMessage("")
 
-        const response = await fetch("http://localhost:8000/admin/chat", {
+        const response = await fetch(`${API_URL}/admin/chat`, {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },

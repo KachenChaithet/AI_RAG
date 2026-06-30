@@ -499,3 +499,31 @@ def search_document(request: DocumentSearchRequest, user=Depends(get_current_use
         if cur:
             cur.close()
         release_conn(conn)
+
+
+@router.get("/document/{doc_id}/chunks")
+def get_document_chunks(doc_id: int, user=Depends(get_current_user)):
+    if user["role"] != "admin":
+        raise HTTPException(403)
+    conn = get_conn()
+    cur = None
+
+    try:
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute(
+            """
+            SELECT id, content
+            FROM chunks
+            WHERE doc_id = %s
+            ORDER BY id ASC            
+            """,
+            (doc_id,),
+        )
+        chunks = cur.fetchall()
+        return chunks
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        if cur:
+            cur.close()
+        release_conn(conn)

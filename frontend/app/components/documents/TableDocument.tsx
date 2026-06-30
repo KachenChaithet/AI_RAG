@@ -11,7 +11,7 @@ import DocumentDetailDialog from "./DocumentDetailDialog"
 import { useState } from "react"
 import EditFilenameDialog from "./EditFilenameDialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import axios from "axios"
+import api from "@/lib/axios"
 
 interface TableDocumentProps {
     data: Document[]
@@ -30,7 +30,7 @@ const TableDocument = ({ data }: TableDocumentProps) => {
 
     const handDownload = async (docId: number, filename: string) => {
         filename = filename.split('.').slice(0, -1).join('.')
-        const response = await axios.get(`http://localhost:8000/document/${docId}/download`,
+        const response = await api.get(`/document/${docId}/download`,
             {
                 withCredentials: true,
                 responseType: "blob"
@@ -46,7 +46,7 @@ const TableDocument = ({ data }: TableDocumentProps) => {
         link.remove()
         window.URL.revokeObjectURL(url)
     }
-    
+
     return (
         <>
             <Table className=" ">

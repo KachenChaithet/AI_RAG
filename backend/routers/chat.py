@@ -82,7 +82,7 @@ def chat_ollama(text: str, history: list | None = None):
         {"role": "user", "content": text},
     ]
     response = ollama.chat(
-        model="qwen2.5:7b", stream=True, messages=messages, options={"temperature": 0.1}
+        model="gemma4:e4b", stream=True, messages=messages, options={"temperature": 0.1}
     )
 
     for chunk in response:

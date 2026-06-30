@@ -22,6 +22,7 @@ export default function Home() {
   if (isError) {
     return <div>error</div>
   }
+  const API_URL = process.env.NEXT_PUBLIC_API_URL
 
   const handleStartChat = async () => {
     if (!message.trim()) return
@@ -30,7 +31,7 @@ export default function Home() {
     const text = message
     setMessage("")
 
-    const response = await fetch("http://localhost:8000/chat", {
+    const response = await fetch(`${API_URL}/chat`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
