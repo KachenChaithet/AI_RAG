@@ -8,13 +8,12 @@ from typing import Literal
 router = APIRouter()
 
 
-@router.get(
-    "/session/user",
-)
+@router.get("/session/user")
 def get_sessions(
     type: Literal["user", "admin"] = "user",
     limit: int = 20,
     offset: int = 0,
+    group_by: Literal["none", "date", "project"] = "none",
     search: str | None = None,
     user=Depends(get_current_user),
 ):
@@ -24,40 +23,43 @@ def get_sessions(
     cur = None
     try:
         cur = conn.cursor(cursor_factory=RealDictCursor)
+        pattern = f"%{search.strip()}%" if search and search.strip() else None
 
-        pattern = (
-            f"%{search.strip()}%" if search and search.strip() else None
-        )  # ถ้า มี search เอา search ไปทำ ให้ไม่มี space แล้วเป็น format %search% ถ้าไม่ให้ pattern = None
+        # กำหนด ORDER BY ตาม group_by
+        if group_by == "date":
+            order = "DATE(created_at) DESC, created_at DESC"
+        elif group_by == "project":
+            order = "project ASC, created_at DESC"
+        else:
+            order = "created_at DESC"
+
+        # เลือก column ตาม group_by
+        if group_by == "date":
+            select = "id, user_id, topic, created_at, DATE(created_at) as date_group"
+        elif group_by == "project":
+            select = "id, user_id, topic, created_at, project"
+        else:
+            select = "id, user_id, topic, created_at"
+
         cur.execute(
-            """
-            SELECT id, user_id, topic, created_at
+            f"""
+            SELECT {select}
             FROM session
             WHERE user_id = %s
             AND type = %s
             AND (%s IS NULL OR topic ILIKE %s)
-            ORDER BY created_at DESC
+            ORDER BY {order}
             LIMIT %s OFFSET %s
             """,
-            (
-                user["user_id"],
-                type,
-                pattern,
-                pattern,
-                limit,
-                offset,
-            ),
+            (user["user_id"], type, pattern, pattern, limit, offset),
         )
-
         return cur.fetchall()
-
     except Exception as e:
         conn.rollback()
         return {"error": str(e)}
-
     finally:
         if cur:
             cur.close()
-
         release_conn(conn)
 
 

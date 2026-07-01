@@ -18,7 +18,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import { useDeleteSession, useSessions } from "@/hooks/useSession"
-import { ChevronDown, ChevronRight, EllipsisVertical, FileText, LogOut, MessageCircle, Pen, Plus, Search, Settings, SlidersVertical, Trash, User } from "lucide-react"
+import { ChevronDown, ChevronRight, EllipsisVertical, FileText, Folder, LogOut, MessageCircle, Pen, Plus, Search, Settings, SlidersVertical, Trash, User } from "lucide-react"
 import { useState } from "react"
 import { ModeToggle } from "./ModeToggle"
 import { usePathname, useRouter } from "next/navigation"
@@ -31,19 +31,20 @@ import { useUser } from "@/providers/UserProvider"
 
 export function AppSidebar() {
     const { open } = useSidebar()
-    const { data: userSession, isLoading, isError } = useSessions(undefined, undefined, undefined, 'user')
-    const { data: adminSession } = useSessions(undefined, undefined, undefined, 'admin')
+
+    const [sortUser, setSortUser] = useState<"none" | "date" | "project">("none")
+    const [sortAdmin, setSortAdmin] = useState<"none" | "date" | "project">("none")
+
+    const { data: userSession, isLoading, isError } = useSessions(undefined, undefined, undefined, 'user', sortUser)
+    const { data: adminSession } = useSessions(undefined, undefined, undefined, 'admin', sortAdmin)
+
     const { user } = useUser()
     const [openRecents, setOpenRecents] = useState(true)
     const [openRecentsAdmin, setOpenRecentsAdmin] = useState(true)
     const { mutate: mutateLogout, isPending: isLogout } = useLogout()
-    const { mutate: mutateDeleteSession, isPending: isDeleteSession } = useDeleteSession()
 
-    const [renameOpen, setRenameOpen] = useState(false)
-    const [selectSession, setSelectedSession] = useState(null)
     const [hoverRecents, setHoverRecents] = useState(false)
 
-    const [sort, setSort] = useState<"none" | "date" | "project">("none")
     const { setOpen } = useSearchStore()
     const pathname = usePathname()
 
@@ -91,6 +92,12 @@ export function AppSidebar() {
                                     <p>Chats</p>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton tooltip={"Projects"} onClick={() => router.push("/projects")}>
+                                    <Folder className="size-4" />
+                                    <p>Project</p>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                             {user?.role === 'admin' && (
                                 <SidebarMenuItem>
                                     <SidebarMenuButton tooltip={"Documents"} onClick={() => router.push("/documents")}>
@@ -99,6 +106,7 @@ export function AppSidebar() {
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             )}
+
 
 
                         </SidebarMenu>
@@ -141,20 +149,20 @@ export function AppSidebar() {
                                                     <DropdownMenuGroup>
                                                         <DropdownMenuLabel>Group by</DropdownMenuLabel>
                                                         <DropdownMenuCheckboxItem
-                                                            checked={sort === 'none'}
-                                                            onCheckedChange={() => setSort('none')}
+                                                            checked={sortUser === 'none'}
+                                                            onCheckedChange={() => setSortUser('none')}
                                                         >
                                                             None
                                                         </DropdownMenuCheckboxItem>
                                                         <DropdownMenuCheckboxItem
-                                                            checked={sort === 'date'}
-                                                            onCheckedChange={() => setSort('date')}
+                                                            checked={sortUser === 'date'}
+                                                            onCheckedChange={() => setSortUser('date')}
                                                         >
                                                             Date
                                                         </DropdownMenuCheckboxItem>
                                                         <DropdownMenuCheckboxItem
-                                                            checked={sort === 'project'}
-                                                            onCheckedChange={() => setSort('project')}
+                                                            checked={sortUser === 'project'}
+                                                            onCheckedChange={() => setSortUser('project')}
                                                         >
                                                             Project
                                                         </DropdownMenuCheckboxItem>
@@ -222,25 +230,25 @@ export function AppSidebar() {
                                                     <DropdownMenuGroup>
                                                         <DropdownMenuLabel>Group by</DropdownMenuLabel>
                                                         <DropdownMenuCheckboxItem
-                                                            checked={sort === 'none'}
-                                                            onCheckedChange={() => setSort('none')}
+                                                            checked={sortAdmin === 'none'}
+                                                            onCheckedChange={() => setSortAdmin('none')}
                                                         >
                                                             None
                                                         </DropdownMenuCheckboxItem>
                                                         <DropdownMenuCheckboxItem
-                                                            checked={sort === 'date'}
-                                                            onCheckedChange={() => setSort('date')}
+                                                            checked={sortAdmin === 'date'}
+                                                            onCheckedChange={() => setSortAdmin('date')}
                                                         >
                                                             Date
                                                         </DropdownMenuCheckboxItem>
                                                         <DropdownMenuCheckboxItem
-                                                            checked={sort === 'project'}
-                                                            onCheckedChange={() => setSort('project')}
+                                                            checked={sortAdmin === 'project'}
+                                                            onCheckedChange={() => setSortAdmin('project')}
                                                         >
                                                             Project
                                                         </DropdownMenuCheckboxItem>
                                                     </DropdownMenuGroup>
-                                            </DropdownMenuContent>
+                                                </DropdownMenuContent>
                                             </DropdownMenu>
                                         )}
                                     </div>

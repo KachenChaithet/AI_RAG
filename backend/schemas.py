@@ -45,3 +45,7 @@ class DeleteSessionsRequest(BaseModel):
 
 class DocumentSearchRequest(BaseModel):
     text: str
+
+
+class ProjectCreatedRequest(BaseModel):
+    name: str

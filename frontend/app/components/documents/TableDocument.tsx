@@ -127,11 +127,14 @@ const TableDocument = ({ data }: TableDocumentProps) => {
                     ))}
                 </TableBody>
             </Table>
-            <DocumentDetailDialog
-                document={selectedDoc}
-                open={!!selectedDoc}
-                onOpenChage={(open) => { if (!open) setSelectedDoc(null) }}
-            />
+            {!!selectedDoc &&
+                <DocumentDetailDialog
+                    document={selectedDoc}
+                    open={!!selectedDoc}
+                    onOpenChage={(open) => { if (!open) setSelectedDoc(null) }}
+                />
+            }
+
             <EditFilenameDialog
                 document={editDoc}
                 open={!!editDoc}

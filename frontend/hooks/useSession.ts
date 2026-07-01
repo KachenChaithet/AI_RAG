@@ -22,9 +22,9 @@ interface Message {
 
 
 
-export function useSessions(limit = 20, offset = 0, search?: string, type: "user" | "admin" = "user", options?: { enabled?: boolean }) {
+export function useSessions(limit = 20, offset = 0, search?: string, type: "user" | "admin" = "user", group_by: "none" | "date" | "project" = "none", options?: { enabled?: boolean }) {
     return useQuery<Session[] | undefined>({
-        queryKey: ["sessions", type, limit, offset, search],
+        queryKey: ["sessions", type, limit, offset, search, group_by],
         queryFn: () => api.get("/session/user", {
             withCredentials: true,
             params: {
@@ -32,6 +32,7 @@ export function useSessions(limit = 20, offset = 0, search?: string, type: "user
                 offset,
                 search,
                 type,
+                group_by
             }
         }).then(r => r.data),
         enabled: options?.enabled ?? true

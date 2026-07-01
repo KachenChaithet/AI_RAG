@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Document, useDocumentChunks } from "@/hooks/useDocument"
 import { format } from "date-fns"
 import { th } from "date-fns/locale"
-import { File, FileText, Info, Layers, PanelTopDashed, SquareLibrary, User } from "lucide-react"
+import { File, FileText, Info, Layers, MousePointer, PanelTopDashed, ShieldAlert, SquareLibrary, User } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useState } from "react"
 
@@ -141,15 +141,18 @@ const DocumentDetailDialog = ({ document, open, onOpenChage }: Props) => {
                                 </CardContent>
                             </Card>
 
-                            <Card className="flex-1">
+                            <Card className="flex-1 ">
                                 <CardHeader>
                                     <CardTitle className="text-sm">Document Content</CardTitle>
                                 </CardHeader>
-                                <CardContent className="overflow-y-auto">
+                                <CardContent className="overflow-y-auto h-full ">
                                     {selectedChunk ? (
                                         <p>{selectedChunk}</p>
                                     ) : (
-                                        <p>not found</p>
+                                        <div className=" h-full flex flex-col gap-2 justify-center items-center">
+                                            <MousePointer />
+                                            <p>Selected Page</p>
+                                        </div>
                                     )}
                                 </CardContent>
                             </Card>

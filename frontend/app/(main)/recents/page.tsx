@@ -52,7 +52,7 @@ const page = () => {
 
 
     return (
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col ">
             <div className="max-w-4xl mx-auto w-full mt-10 flex flex-col gap-4">
                 <header className="flex items-center justify-between">
                     <p className="text-3xl font-extralight">Chats</p>

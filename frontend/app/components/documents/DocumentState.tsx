@@ -36,7 +36,7 @@ const DocumentState = () => {
                 typeFilter={typeFilter}
                 onTypeFilter={(val) => { setTypeFilter(val); setPage(1) }}
             />
-            <div className="flex flex-col md:flex-row gap-2 justify-between  ">
+            <div className="flex flex-col md:flex-row gap-2 p-1 justify-between    ">
                 <CardDocument title="Documents" total={status?.total_documents ?? 0} iconClassName="text-blue-500" />
                 <CardDocument title="Chunks" total={status?.total_chunks ?? 0} icon={Layers} iconClassName="text-green-500" />
                 <CardDocument title="Vector Store" total={vector?.pgvector_version ?? ""} icon={Database} iconClassName="text-purple-500" />
