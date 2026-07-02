@@ -181,7 +181,7 @@ export function AppSidebar() {
                                                         onClick={() => router.push(`/chat/${item.id}`)}
                                                         isActive={pathname === `/chat/${item.id}`}
                                                     >
-                                                        <span className="truncate">{item.topic}</span>
+                                                        <span className="truncate ">{item.topic}</span>
                                                     </SidebarMenuButton>
                                                     <DropdownSettting sessionId={item.id} topic={item.topic} key={item.id} asSidebar />
                                                 </SidebarMenuItem>
@@ -275,7 +275,7 @@ export function AppSidebar() {
                     )}
 
                 </SidebarContent>
-                <SidebarFooter className={` bg-gray-200 shadow-md`}>
+                <SidebarFooter className={` bg-muted shadow-md`}>
                     <SidebarMenu >
                         <SidebarMenuItem className={`${open && 'flex items-center gap-2 '}`} >
                             <DropdownMenu >

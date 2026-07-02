@@ -19,12 +19,12 @@ const Navbar = ({ onUploadClick, onPageChange, onSearchChange, page, search, tot
                 <p className="text-xs text-muted-foreground">Manage your documents and knowledge base</p>
             </div>
             <div className="flex items-center gap-2">
-                <div className="rounded-md border flex items-center p-1 bg-neutral-200 max-w-xs">
+                <div className="rounded-md border flex items-center p-1 bg-muted max-w-xs">
                     <span>
                         <Search className="size-4 text-neutral-400 shrink-0" />
                     </span>
                     <Input
-                        className="border-none outline-0 focus-visible:ring-0 bg-transparent"
+                        className="border-none outline-0 focus-visible:ring-0 bg-transparent!"
                         placeholder="Search documents"
                         value={search}
                         onChange={(e) => onSearchChange(e.target.value)}

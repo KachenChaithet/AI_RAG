@@ -6,12 +6,16 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Pen } from "lucide-react"
 import { useUpdateSession } from "@/hooks/useSession"
 
+type RenameType = "session" | "project"
+
 interface RenameDialogProps {
     sessionId: number
     topic: string
+    type?: RenameType
+
 }
 
-const RenameDialog = ({ sessionId, topic }: RenameDialogProps) => {
+const RenameDialog = ({ sessionId, topic, type = "session" }: RenameDialogProps) => {
     const [newTopic, setNewTopic] = useState(topic)
     const [open, setOpen] = useState(false)
     const { mutate, isPending, isError } = useUpdateSession()
@@ -22,11 +26,13 @@ const RenameDialog = ({ sessionId, topic }: RenameDialogProps) => {
             setOpen(false)
             return
         }
-        mutate({ sessionId: sessionId, topic: newTopic }, {
-            onSuccess: () => {
-                setOpen(false)
-            }
-        })
+        if (type === 'session') {
+            mutate({ sessionId: sessionId, topic: newTopic }, {
+                onSuccess: () => {
+                    setOpen(false)
+                }
+            })
+        }
     }
 
     return (

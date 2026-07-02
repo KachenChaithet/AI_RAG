@@ -92,14 +92,14 @@ const page = () => {
                         )}
                     </div>
                 </header>
-                <div className="rounded-md border flex items-center p-1 bg-neutral-200">
+                <div className="rounded-md border flex items-center p-1 bg-muted">
                     <span className="px-2">
                         <Search className="size-4 text-neutral-400 shrink-0" />
                     </span>
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="border-none outline-0 focus-visible:ring-0 bg-transparent placeholder:font-bold"
+                        className="border-none outline-0 focus-visible:ring-0 bg-transparent! placeholder:font-bold"
                         placeholder="Search chats..."
                     />
 

@@ -62,7 +62,7 @@ export default function Page() {
                                 message.role === "user" ? (
                                     <div className="flex justify-end" key={message.id}>
                                         <span
-                                            className="bg-gray-200 p-3 rounded-[16px] inline-block"
+                                            className="bg-muted p-3 rounded-[16px] inline-block"
                                         >
                                             {message.text}
                                         </span>
@@ -89,7 +89,7 @@ export default function Page() {
             </div>
 
             <div className="shrink-0 ">
-                <div className="max-w-177 mx-auto bg-gray-300 rounded-[16px] p-4">
+                <div className="max-w-177 mx-auto bg-muted rounded-[16px] p-4">
                     <textarea
                         className="w-full resize-none bg-transparent outline-none placeholder:text-muted-foreground text-base max-h-100 overflow-y-auto"
                         placeholder="Write a message..."
@@ -109,7 +109,7 @@ export default function Page() {
 
                     />
                     <div className="flex justify-end">
-                        <Button disabled={isPending} onClick={handleSend}>
+                        <Button disabled={isPending} onClick={handleSend} >
                             <Send className="size-4" />
                         </Button>
                     </div>

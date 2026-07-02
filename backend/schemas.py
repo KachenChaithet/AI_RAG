@@ -49,3 +49,6 @@ class DocumentSearchRequest(BaseModel):
 
 class ProjectCreatedRequest(BaseModel):
     name: str
+
+class ProjectUpdatedRequest(BaseModel):
+    name: str
